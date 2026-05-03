@@ -1,65 +1,134 @@
-import Image from "next/image";
+import { Hero } from "@/components/hero";
+import { ProjectCard } from "@/components/project-card";
+import { isRole, type Role } from "@/lib/utils";
+import { projectsForRole } from "@/lib/projects";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/icons";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ role?: string }>;
+}) {
+  const sp = await searchParams;
+  const role: Role = isRole(sp.role) ? sp.role : "ai";
+  const projects = projectsForRole(role);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <Hero role={role} />
+
+      <section id="work" className="py-16 md:py-24 border-t border-border relative z-10">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
+            <div>
+              <div className="label mb-2">Selected work</div>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+                Production systems I&apos;ve shipped.
+              </h2>
+            </div>
+            <p className="text-fg-muted text-sm max-w-md">
+              Ordered for the <span className="text-fg">{role === "ai" ? "AI/ML" : role === "fullstack" ? "full-stack" : "backend"}</span> view. Toggle the role above to re-rank.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5">
+            {projects.map((p) => (
+              <ProjectCard key={p.slug} project={p} />
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </section>
+
+      <section id="about" className="py-16 md:py-24 border-t border-border relative z-10">
+        <div className="mx-auto max-w-6xl px-5 grid md:grid-cols-[1fr_1.5fr] gap-10">
+          <div>
+            <div className="label mb-2">About</div>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+              Who I am.
+            </h2>
+          </div>
+          <div className="prose-tanmay text-fg-muted">
+            <p>
+              I&apos;m an <strong>AI/ML Engineer</strong> with 3+ years building production systems — multi-stage LLM pipelines, real-time computer vision, sub-second voice loops, and the backend infrastructure to keep them running cheaply.
+            </p>
+            <p>
+              I currently lead AI/ML engineering at <strong>Q IT Technologies</strong>, where I&apos;ve shipped <Link href="/projects/directly" className="text-accent">Directly</Link> (real-time AI dance coaching with sub-150ms feedback), <Link href="/projects/shorten" className="text-accent">Shorten</Link> (a 6-stage LLM pipeline that turns 100+ videos into 80–120 page enterprise reports), and the GenAI receipt OCR feature for <Link href="/projects/favorit" className="text-accent">FavorIt</Link>.
+            </p>
+            <p>
+              Before that I was a Systems Engineer at <strong>TCS</strong> (developer for General Motors&apos; ADAS data pipeline) and an SDE intern at Applyin.co. I have an <strong>MS in Computer Science</strong> from the University of Florida (3.90 / 4.00).
+            </p>
+            <p>
+              I care about <strong>latency budgets</strong>, <strong>graceful degradation</strong>, and <strong>cost-controlled inference</strong>. The portfolio you&apos;re reading runs Claude with prompt caching to keep per-turn cost under a cent.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="py-16 md:py-24 border-t border-border relative z-10">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="label mb-2">Contact</div>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-10">
+            Let&apos;s talk.
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <ContactCard
+              icon={<Mail className="w-4 h-4" />}
+              label="Email"
+              value="tanmaysaxena58@gmail.com"
+              href="mailto:tanmaysaxena58@gmail.com"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <ContactCard
+              icon={<Phone className="w-4 h-4" />}
+              label="Phone"
+              value="+1 352-721-4719"
+              href="tel:+13527214719"
+            />
+            <ContactCard
+              icon={<LinkedinIcon className="w-4 h-4" />}
+              label="LinkedIn"
+              value="t-saxena"
+              href="https://linkedin.com/in/t-saxena"
+            />
+            <ContactCard
+              icon={<GithubIcon className="w-4 h-4" />}
+              label="GitHub"
+              value="Jawsenigma"
+              href="https://github.com/Jawsenigma"
+            />
+          </div>
+          <div className="mt-8 inline-flex items-center gap-2 text-sm text-fg-muted">
+            <MapPin className="w-4 h-4" /> Gainesville, FL · Open to relocate
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
+  );
+}
+
+function ContactCard({
+  icon,
+  label,
+  value,
+  href,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  href: string;
+}) {
+  return (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel="noreferrer"
+      className="group rounded-lg border border-border bg-bg-elev p-4 hover:border-accent transition-colors"
+    >
+      <div className="flex items-center gap-2 text-fg-muted group-hover:text-accent transition-colors">
+        {icon}
+        <span className="label !text-fg-muted group-hover:!text-accent">{label}</span>
+      </div>
+      <div className="mt-2 text-sm break-all">{value}</div>
+    </a>
   );
 }

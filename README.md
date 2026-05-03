@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tanmay-portfolio
 
-## Getting Started
+Personal site for Tanmay Saxena — AI/ML Engineer.
 
-First, run the development server:
+Live: https://jawsenigma.netlify.app
+
+## Stack
+
+- **Next.js 16** (App Router, RSC, server actions, route handlers)
+- **React 19**
+- **TypeScript** (strict)
+- **Tailwind CSS 4** (with `@theme` design tokens)
+- **Anthropic Claude** (`claude-sonnet-4-6`) with prompt caching for the chat agent
+- **MediaPipe Tasks Vision** for the live pose-mirror hero
+- **Netlify** hosting
+
+## Local dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local        # then add your ANTHROPIC_API_KEY
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture overview
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── layout.tsx              # Root layout, Geist fonts, Nav + Footer + ChatWidget
+├── page.tsx                # Homepage (role-aware via ?role=ai|fullstack|backend)
+├── globals.css             # Design tokens (@theme), prose styles, animations
+├── projects/[slug]/        # Dynamic project case-study pages
+├── resume/                 # Résumé download page (3 role-targeted PDFs)
+└── api/chat/               # Claude streaming endpoint w/ prompt caching
 
-## Learn More
+components/
+├── nav.tsx, footer.tsx     # Site shell
+├── hero.tsx                # Hero with role toggle + pose mirror
+├── role-toggle.tsx         # Client-side role switcher (URL param-driven)
+├── project-card.tsx        # Project tile w/ metrics + stack chips
+├── pose-mirror.tsx         # MediaPipe Pose Landmarker (client-side, opt-in camera)
+└── chat-widget.tsx         # Floating "Ask my portfolio" chat (streaming)
 
-To learn more about Next.js, take a look at the following resources:
+lib/
+├── utils.ts                # cn(), Role type, ROLE_META
+├── projects.ts             # All projects + role-aware ranking
+└── agent-context.ts        # System prompt + cached portfolio context for chat
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How role targeting works
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The homepage reads `?role=` from the URL (one of `ai`, `fullstack`, `backend`):
 
-## Deploy on Vercel
+- `ROLE_META[role]` swaps the hero tagline and the résumé PDF link
+- `projectsForRole(role)` re-ranks the project list using `roleWeight` defined per project in `lib/projects.ts`
+- `<RoleToggle>` is a client component that updates the URL via `router.replace()` without a full reload
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Default role is `ai` (no param).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## How the chat agent works
+
+`app/api/chat/route.ts`:
+
+1. Receives `{ messages: [{ role, content }] }` POST
+2. Validates and trims to last 20 turns
+3. Calls `client.messages.stream()` with:
+   - `model: "claude-sonnet-4-6"`
+   - `system`: two text blocks — instructions + portfolio context, with `cache_control: { type: "ephemeral" }` on the context block
+   - The user/assistant turn history
+4. Pipes Anthropic's `content_block_delta` events into a `ReadableStream<Uint8Array>` returned to the client
+5. `chat-widget.tsx` reads the response with `getReader()` + `TextDecoder`, accumulating text into the latest assistant message
+
+The cache breakpoint sits on the long context block (resume + project details), so per-turn cost is roughly:
+- First request: full context tokens (~3K) priced at standard input
+- Subsequent requests within 5min: same context priced at ~10% (cache hit) → roughly $0.003/turn
+
+## How the pose mirror works
+
+`components/pose-mirror.tsx`:
+
+1. Idle state: animated SVG skeleton + "Enable camera mirror" button
+2. On click: requests `getUserMedia({ video, audio: false })` and dynamically imports `@mediapipe/tasks-vision`
+3. Loads `pose_landmarker_lite.task` from Google's model CDN with GPU delegate
+4. Runs `detectForVideo()` per `requestAnimationFrame`, draws skeleton lines + joint dots on a canvas overlay (mirrored horizontally so the visitor sees themselves)
+5. `cleanupRef` stops the camera stream and closes the landmarker on unmount or "Stop" click
+
+Video never leaves the device — same client-side privacy pattern as my work on Directly.
+
+## Deploy
+
+Netlify auto-detects Next.js. Just:
+
+1. Push to GitHub
+2. Connect the repo on Netlify
+3. Set env var: `ANTHROPIC_API_KEY` in Site settings → Environment variables
+4. Deploy
+
+`netlify.toml` pins Node 20 and the Next.js plugin.
+
+## License
+
+MIT.
