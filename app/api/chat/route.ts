@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { SYSTEM_INSTRUCTIONS, PORTFOLIO_CONTEXT } from "@/lib/agent-context";
 import type { NextRequest } from "next/server";
 
@@ -9,11 +9,12 @@ type ClientMessage = { role: "user" | "assistant"; content: string };
 
 const MAX_TURN_TOKENS = 700;
 const MAX_HISTORY = 20;
+const MODEL = "llama-3.3-70b-versatile";
 
 export async function POST(req: NextRequest) {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return new Response(
-      "Chat is not configured. ANTHROPIC_API_KEY is missing on the server.",
+      "Chat is not configured. GROQ_API_KEY is missing on the server.",
       { status: 503 },
     );
   }
@@ -39,33 +40,31 @@ export async function POST(req: NextRequest) {
     return new Response("Last message must be from the user", { status: 400 });
   }
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const client = new OpenAI({
+    apiKey: process.env.GROQ_API_KEY,
+    baseURL: "https://api.groq.com/openai/v1",
+  });
 
-  const upstream = client.messages.stream({
-    model: "claude-sonnet-4-6",
+  const upstream = await client.chat.completions.create({
+    model: MODEL,
     max_tokens: MAX_TURN_TOKENS,
-    system: [
-      { type: "text", text: SYSTEM_INSTRUCTIONS },
+    stream: true,
+    messages: [
       {
-        type: "text",
-        text: PORTFOLIO_CONTEXT,
-        cache_control: { type: "ephemeral" },
+        role: "system",
+        content: `${SYSTEM_INSTRUCTIONS}\n\n${PORTFOLIO_CONTEXT}`,
       },
+      ...messages,
     ],
-    messages,
   });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
-        for await (const event of upstream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            controller.enqueue(encoder.encode(event.delta.text));
-          }
+        for await (const chunk of upstream) {
+          const delta = chunk.choices[0]?.delta?.content;
+          if (delta) controller.enqueue(encoder.encode(delta));
         }
       } catch (e) {
         const msg = e instanceof Error ? e.message : "stream error";

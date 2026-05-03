@@ -10,7 +10,7 @@ Live: https://jawsenigma.netlify.app
 - **React 19**
 - **TypeScript** (strict)
 - **Tailwind CSS 4** (with `@theme` design tokens)
-- **Anthropic Claude** (`claude-sonnet-4-6`) with prompt caching for the chat agent
+- **Groq** (`llama-3.3-70b-versatile`) via OpenAI-compatible API for the chat agent — free tier
 - **MediaPipe Tasks Vision** for the live pose-mirror hero
 - **Netlify** hosting
 
@@ -18,7 +18,7 @@ Live: https://jawsenigma.netlify.app
 
 ```bash
 pnpm install
-cp .env.example .env.local        # then add your ANTHROPIC_API_KEY
+cp .env.example .env.local        # then add your GROQ_API_KEY
 pnpm dev
 ```
 
@@ -33,7 +33,7 @@ app/
 ├── globals.css             # Design tokens (@theme), prose styles, animations
 ├── projects/[slug]/        # Dynamic project case-study pages
 ├── resume/                 # Résumé download page (3 role-targeted PDFs)
-└── api/chat/               # Claude streaming endpoint w/ prompt caching
+└── api/chat/               # Groq streaming endpoint (Llama 3.3 70B / OpenAI-compat)
 
 components/
 ├── nav.tsx, footer.tsx     # Site shell
@@ -46,7 +46,7 @@ components/
 lib/
 ├── utils.ts                # cn(), Role type, ROLE_META
 ├── projects.ts             # All projects + role-aware ranking
-└── agent-context.ts        # System prompt + cached portfolio context for chat
+└── agent-context.ts        # System prompt + portfolio context for chat
 ```
 
 ## How role targeting works
@@ -65,16 +65,16 @@ Default role is `ai` (no param).
 
 1. Receives `{ messages: [{ role, content }] }` POST
 2. Validates and trims to last 20 turns
-3. Calls `client.messages.stream()` with:
-   - `model: "claude-sonnet-4-6"`
-   - `system`: two text blocks — instructions + portfolio context, with `cache_control: { type: "ephemeral" }` on the context block
+3. Calls `client.chat.completions.create({ stream: true })` with:
+   - `model: "llama-3.3-70b-versatile"`
+   - `system`: a single message combining instructions + portfolio context (Groq doesn't need separate cache blocks)
    - The user/assistant turn history
-4. Pipes Anthropic's `content_block_delta` events into a `ReadableStream<Uint8Array>` returned to the client
+4. Pipes OpenAI-compatible `delta.content` chunks into a `ReadableStream<Uint8Array>` returned to the client
 5. `chat-widget.tsx` reads the response with `getReader()` + `TextDecoder`, accumulating text into the latest assistant message
 
-The cache breakpoint sits on the long context block (resume + project details), so per-turn cost is roughly:
-- First request: full context tokens (~3K) priced at standard input
-- Subsequent requests within 5min: same context priced at ~10% (cache hit) → roughly $0.003/turn
+Per-turn cost (Groq free tier):
+- **$0/turn** within Groq free-tier rate limits (~30 req/min, ~14,400 req/day)
+- Sub-second responses thanks to Groq's LPU inference engine
 
 ## How the pose mirror works
 
@@ -94,7 +94,7 @@ Netlify auto-detects Next.js. Just:
 
 1. Push to GitHub
 2. Connect the repo on Netlify
-3. Set env var: `ANTHROPIC_API_KEY` in Site settings → Environment variables
+3. Set env var: `GROQ_API_KEY` in Site settings → Environment variables
 4. Deploy
 
 `netlify.toml` pins Node 20 and the Next.js plugin.

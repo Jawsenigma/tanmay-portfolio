@@ -1,6 +1,6 @@
 // Static context for the portfolio chat agent.
-// Sent as the cached portion of the system prompt — Anthropic prompt caching
-// keeps this on the server so repeat turns cost ~10% of the first turn.
+// Sent as the system prompt for the portfolio chat agent (Groq · Llama 3.3 70B).
+// Free tier on Groq; context resends each turn (~3K tokens).
 
 export const SYSTEM_INSTRUCTIONS = `You are an AI agent representing Tanmay Saxena's portfolio. Visitors ask questions about his work, experience, and decisions; you answer based ONLY on the context provided below.
 
@@ -109,5 +109,5 @@ Auto-scaling Go + WebSocket marketplace.
 - Built in Next.js 16 (App Router) + React 19 + Tailwind 4 + TypeScript
 - Hosted on Netlify at jawsenigma.netlify.app
 - The hero "pose mirror" runs MediaPipe Pose Landmarker client-side — same client-side CV pattern as Directly
-- This chat agent uses Anthropic Claude with prompt caching: the resume + project context above is cached, so per-turn cost is around $0.003 after the first turn
+- This chat agent runs Llama 3.3 70B on Groq via the OpenAI-compatible API. Groq free tier means $0/turn within rate limits — same Groq inference engine I use in Shorten.
 `;

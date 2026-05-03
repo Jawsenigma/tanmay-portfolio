@@ -64,7 +64,7 @@ export function ChatWidget() {
         const copy = [...m];
         copy[copy.length - 1] = {
           role: "assistant",
-          content: `⚠ ${msg}\n\n(If this is a fresh deploy, the ANTHROPIC_API_KEY env var may not be set.)`,
+          content: `⚠ ${msg}\n\n(If this is a fresh deploy, the GROQ_API_KEY env var may not be set.)`,
         };
         return copy;
       });
@@ -96,7 +96,7 @@ export function ChatWidget() {
             <div>
               <div className="text-sm font-medium">Ask Tanmay&apos;s portfolio</div>
               <div className="text-[11px] text-fg-muted font-mono">
-                Claude · prompt-cached resume + projects
+                Groq · Llama 3.3 70B · free-tier
               </div>
             </div>
           </div>
