@@ -78,19 +78,33 @@ export function ChatWidget() {
 
   return (
     <>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-accent text-accent-fg px-4 py-3 shadow-2xl hover:opacity-90 transition-opacity font-medium text-sm"
-      >
-        {open ? (
-          <X className="w-4 h-4" />
-        ) : (
+      <div className="fixed bottom-5 right-5 z-40">
+        {!open && (
           <>
-            <Sparkles className="w-4 h-4" /> Ask my portfolio
+            <span
+              aria-hidden
+              className="absolute inset-0 rounded-full border-2 border-accent attention-ring pointer-events-none"
+            />
+            <span
+              aria-hidden
+              className="absolute inset-0 rounded-full border-2 border-accent attention-ring-delayed pointer-events-none"
+            />
           </>
         )}
-      </button>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close chat" : "Open chat"}
+          className={`relative inline-flex items-center gap-2 rounded-full bg-accent text-accent-fg px-4 py-3 shadow-2xl hover:opacity-90 transition-opacity font-medium text-sm ${open ? "" : "attention-glow"}`}
+        >
+          {open ? (
+            <X className="w-4 h-4" />
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4" /> Ask my portfolio
+            </>
+          )}
+        </button>
+      </div>
 
       {open && (
         <div className="fixed bottom-20 right-5 z-40 w-[min(380px,calc(100vw-2.5rem))] h-[min(560px,calc(100vh-7rem))] rounded-xl border border-border bg-bg-elev shadow-2xl flex flex-col overflow-hidden fade-up">
