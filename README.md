@@ -6,12 +6,12 @@ Live: https://jawsenigma.netlify.app
 
 ## Stack
 
-- **Next.js 16** (App Router, RSC, server actions, route handlers)
-- **React 19**
-- **TypeScript** (strict)
-- **Tailwind CSS 4** (with `@theme` design tokens)
+- **Next.js 16** (App Router, RSC, route handlers)
+- **React 19** + **TypeScript** strict
+- **Tailwind CSS 4** with `@theme` design tokens
+- **Three.js** — Avatar3D (pose-driven wireframe humanoid) + ParticleField hero background
+- **MediaPipe Tasks Vision** — client-side Pose Landmarker (worldLandmarks → bone rotations)
 - **Groq** (`llama-3.3-70b-versatile`) via OpenAI-compatible API for the chat agent — free tier
-- **MediaPipe Tasks Vision** for the live pose-mirror hero
 - **Netlify** hosting
 
 ## Local dev
@@ -24,80 +24,75 @@ pnpm dev
 
 Open http://localhost:3000.
 
-## Architecture overview
+## Architecture
 
 ```
 app/
 ├── layout.tsx              # Root layout, Geist fonts, Nav + Footer + ChatWidget
-├── page.tsx                # Homepage (role-aware via ?role=ai|fullstack|backend)
+├── page.tsx                # Homepage — hero, work, stack, about, contact
 ├── globals.css             # Design tokens (@theme), prose styles, animations
 ├── projects/[slug]/        # Dynamic project case-study pages
-├── resume/                 # Résumé download page (3 role-targeted PDFs)
-└── api/chat/               # Groq streaming endpoint (Llama 3.3 70B / OpenAI-compat)
+├── resume/                 # Single AI/ML résumé page with inline PDF preview
+└── api/chat/               # Groq streaming endpoint (Llama 3.3 70B)
 
 components/
 ├── nav.tsx, footer.tsx     # Site shell
-├── hero.tsx                # Hero with role toggle + pose mirror
-├── role-toggle.tsx         # Client-side role switcher (URL param-driven)
+├── hero.tsx                # Cinematic hero with particle field + 3D avatar
+├── particle-field.tsx      # Three.js point-cloud background (additive blending)
+├── avatar-3d.tsx           # Wireframe humanoid (idle sway + opt-in MediaPipe pose)
+├── stack-grid.tsx          # AI/ML stack section (foundations / speech / CV / infra)
 ├── project-card.tsx        # Project tile w/ metrics + stack chips
-├── pose-mirror.tsx         # MediaPipe Pose Landmarker (client-side, opt-in camera)
-└── chat-widget.tsx         # Floating "Ask my portfolio" chat (streaming)
+├── chat-widget.tsx         # Floating "Ask my portfolio" chat (streaming)
+└── icons.tsx               # GitHub + LinkedIn brand SVGs
 
 lib/
-├── utils.ts                # cn(), Role type, ROLE_META
-├── projects.ts             # All projects + role-aware ranking
+├── utils.ts                # cn(), RESUME_PATH, TAGLINE
+├── projects.ts             # Projects + getProject(slug)
 └── agent-context.ts        # System prompt + portfolio context for chat
 ```
 
-## How role targeting works
+## Hero composition
 
-The homepage reads `?role=` from the URL (one of `ai`, `fullstack`, `backend`):
+Three Three.js scenes layered:
 
-- `ROLE_META[role]` swaps the hero tagline and the résumé PDF link
-- `projectsForRole(role)` re-ranks the project list using `roleWeight` defined per project in `lib/projects.ts`
-- `<RoleToggle>` is a client component that updates the URL via `router.replace()` without a full reload
+1. **`<ParticleField>`** — full-bleed background, ~750 additively-blended points in a sphere, slow rotation, subtle mouse parallax, ~80 connecting lines for graph aesthetic
+2. **`<Avatar3D>`** — wireframe humanoid (33 joints + 22 bones), procedural idle sway by default, opt-in MediaPipe pose-mirroring on demand
+3. **Page content** — hero text, stats, CTAs, with a backdrop blur on the résumé button
 
-Default role is `ai` (no param).
+Each Three.js component dynamically imports `three` inside `useEffect` so the initial bundle stays slim.
 
-## How the chat agent works
+## Chat agent
 
 `app/api/chat/route.ts`:
 
 1. Receives `{ messages: [{ role, content }] }` POST
-2. Validates and trims to last 20 turns
-3. Calls `client.chat.completions.create({ stream: true })` with:
+2. Trims to last 20 turns
+3. Calls `client.chat.completions.create({ stream: true })`:
    - `model: "llama-3.3-70b-versatile"`
-   - `system`: a single message combining instructions + portfolio context (Groq doesn't need separate cache blocks)
-   - The user/assistant turn history
-4. Pipes OpenAI-compatible `delta.content` chunks into a `ReadableStream<Uint8Array>` returned to the client
-5. `chat-widget.tsx` reads the response with `getReader()` + `TextDecoder`, accumulating text into the latest assistant message
+   - `baseURL: "https://api.groq.com/openai/v1"`
+   - `system`: instructions + portfolio context as a single message
+4. Pipes OpenAI-compatible `delta.content` chunks into a `ReadableStream<Uint8Array>`
+5. `chat-widget.tsx` reads via `getReader()` + `TextDecoder`, streaming into the latest assistant message
 
-Per-turn cost (Groq free tier):
-- **$0/turn** within Groq free-tier rate limits (~30 req/min, ~14,400 req/day)
-- Sub-second responses thanks to Groq's LPU inference engine
+**Cost**: $0/turn within Groq's free-tier rate limits (~30 req/min, ~14,400 req/day). Sub-second responses thanks to Groq's LPU.
 
-## How the pose mirror works
+## Pose mirror in the avatar
 
-`components/pose-mirror.tsx`:
+`components/avatar-3d.tsx`:
 
-1. Idle state: animated SVG skeleton + "Enable camera mirror" button
-2. On click: requests `getUserMedia({ video, audio: false })` and dynamically imports `@mediapipe/tasks-vision`
-3. Loads `pose_landmarker_lite.task` from Google's model CDN with GPU delegate
-4. Runs `detectForVideo()` per `requestAnimationFrame`, draws skeleton lines + joint dots on a canvas overlay (mirrored horizontally so the visitor sees themselves)
-5. `cleanupRef` stops the camera stream and closes the landmarker on unmount or "Stop" click
+1. **Idle (default)**: procedural sway (hip swing, breath, head bob, arm swing) + slow auto-rotation around Y axis. Looks alive without any permission.
+2. **Mirror me**: requests `getUserMedia({ video, audio: false })`, dynamically imports `@mediapipe/tasks-vision`, loads `pose_landmarker_lite.task` from Google's model CDN with GPU delegate
+3. Runs `detectForVideo()` per RAF, uses **`worldLandmarks`** (true 3D coords, not 2D image projection) to drive joint positions
+4. Lerp-smoothed between frames; mirrored on X for selfie view
 
-Video never leaves the device — same client-side privacy pattern as my work on Directly.
+Video never leaves the device — same client-side privacy pattern as Directly.
 
-## Deploy
-
-Netlify auto-detects Next.js. Just:
+## Deploy (Netlify)
 
 1. Push to GitHub
-2. Connect the repo on Netlify
-3. Set env var: `GROQ_API_KEY` in Site settings → Environment variables
+2. Connect repo on Netlify (build settings auto-detect from `netlify.toml`, Node 20)
+3. **Site configuration → Environment variables → `GROQ_API_KEY`** = your `gsk_...`
 4. Deploy
-
-`netlify.toml` pins Node 20 and the Next.js plugin.
 
 ## License
 

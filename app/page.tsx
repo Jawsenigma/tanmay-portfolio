@@ -1,71 +1,54 @@
 import { Hero } from "@/components/hero";
-import { ProjectCard } from "@/components/project-card";
-import { isRole, type Role } from "@/lib/utils";
-import { projectsForRole } from "@/lib/projects";
+import { ExperienceSection } from "@/components/experience-section";
+import { ProjectsSection } from "@/components/projects-section";
+import { StackGrid } from "@/components/stack-grid";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import Link from "next/link";
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ role?: string }>;
-}) {
-  const sp = await searchParams;
-  const role: Role = isRole(sp.role) ? sp.role : "ai";
-  const projects = projectsForRole(role);
-
+export default function Home() {
   return (
     <>
-      <Hero role={role} />
+      <Hero />
 
-      <section id="work" className="py-16 md:py-24 border-t border-border relative z-10">
-        <div className="mx-auto max-w-6xl px-5">
-          <div className="flex items-end justify-between mb-10 gap-6 flex-wrap">
-            <div>
-              <div className="label mb-2">Selected work</div>
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-                Production systems I&apos;ve shipped.
-              </h2>
-            </div>
-            <p className="text-fg-muted text-sm max-w-md">
-              Ordered for the <span className="text-fg">{role === "ai" ? "AI/ML" : role === "fullstack" ? "full-stack" : "backend"}</span> view. Toggle the role above to re-rank.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-5">
-            {projects.map((p) => (
-              <ProjectCard key={p.slug} project={p} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ExperienceSection />
 
-      <section id="about" className="py-16 md:py-24 border-t border-border relative z-10">
+      <StackGrid />
+
+      <ProjectsSection />
+
+      <section
+        id="about"
+        className="py-16 md:py-24 border-t border-border relative z-10"
+      >
         <div className="mx-auto max-w-6xl px-5 grid md:grid-cols-[1fr_1.5fr] gap-10">
           <div>
             <div className="label mb-2">About</div>
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-              Who I am.
+              How I think about AI engineering.
             </h2>
           </div>
           <div className="prose-tanmay text-fg-muted">
             <p>
-              I&apos;m an <strong>AI/ML Engineer</strong> with 3+ years building production systems — multi-stage LLM pipelines, real-time computer vision, sub-second voice loops, and the backend infrastructure to keep them running cheaply.
+              I&apos;m an <strong>AI/ML Engineer</strong> who builds production systems where every millisecond and every cent counts. Foundation models are the easy part — the engineering is the chain around them: graceful fallback, latency budgets, RAG plumbing, GPU dispatch, cost ceilings, evals.
             </p>
             <p>
-              I currently lead AI/ML engineering at <strong>Q IT Technologies</strong>, where I&apos;ve shipped <Link href="/projects/directly" className="text-accent">Directly</Link> (real-time AI dance coaching with sub-150ms feedback), <Link href="/projects/shorten" className="text-accent">Shorten</Link> (a 6-stage LLM pipeline that turns 100+ videos into 80–120 page enterprise reports), and the GenAI receipt OCR feature for <Link href="/projects/favorit" className="text-accent">FavorIt</Link>.
+              I currently lead AI/ML engineering at <strong>Q IT Technologies</strong>, where I&apos;ve led delivery of three production AI products: <Link href="/projects/directly" className="text-accent">Directly</Link>, <Link href="/projects/shorten" className="text-accent">Shorten</Link>, and the GenAI features inside <Link href="/projects/favorit" className="text-accent">FavorIt</Link>.
             </p>
             <p>
-              Before that I was a Systems Engineer at <strong>TCS</strong> (developer for General Motors&apos; ADAS data pipeline) and an SDE intern at Applyin.co. I have an <strong>MS in Computer Science</strong> from the University of Florida (3.90 / 4.00).
+              I have an <strong>MS in Computer Science</strong> from the University of Florida (3.90 / 4.00). Before AI, I built large-scale Django/PostgreSQL pipelines for General Motors&apos; ADAS data at TCS — the systems-engineering muscle still shows up in how I scaffold inference infrastructure.
             </p>
             <p>
-              I care about <strong>latency budgets</strong>, <strong>graceful degradation</strong>, and <strong>cost-controlled inference</strong>. The portfolio you&apos;re reading runs Claude with prompt caching to keep per-turn cost under a cent.
+              What I optimize for: <strong>latency budgets</strong>, <strong>graceful degradation</strong>, <strong>cost-controlled inference</strong>. The hero you scrolled past runs MediaPipe Pose + Three.js client-side — same client-side CV pattern as Directly. The chat agent on this page runs Llama 3.3 70B on Groq&apos;s LPU (free tier) — same Groq inference engine I use in Shorten.
             </p>
           </div>
         </div>
       </section>
 
-      <section id="contact" className="py-16 md:py-24 border-t border-border relative z-10">
+      <section
+        id="contact"
+        className="py-16 md:py-24 border-t border-border relative z-10"
+      >
         <div className="mx-auto max-w-6xl px-5">
           <div className="label mb-2">Contact</div>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-10">
@@ -126,7 +109,9 @@ function ContactCard({
     >
       <div className="flex items-center gap-2 text-fg-muted group-hover:text-accent transition-colors">
         {icon}
-        <span className="label !text-fg-muted group-hover:!text-accent">{label}</span>
+        <span className="label !text-fg-muted group-hover:!text-accent">
+          {label}
+        </span>
       </div>
       <div className="mt-2 text-sm break-all">{value}</div>
     </a>

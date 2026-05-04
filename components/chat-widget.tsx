@@ -6,10 +6,10 @@ import { MessageSquare, X, Send, Sparkles } from "lucide-react";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const SUGGESTED = [
-  "What did you build at Q IT Technologies?",
-  "Walk me through your AI/ML stack",
-  "How did you hit <150ms feedback latency?",
-  "What backend systems have you scaled?",
+  "Walk me through Directly's voice coaching loop",
+  "How do you control LLM inference cost in production?",
+  "What's your CV pipeline for sub-150ms feedback?",
+  "How does Shorten's 6-stage LLM pipeline work?",
 ];
 
 export function ChatWidget() {

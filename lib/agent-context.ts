@@ -44,7 +44,9 @@ I think in latency budgets, graceful degradation, and cost-controlled inference.
 - 3D / Graphics: Three.js, WebGPU + WGSL shaders, custom GLSL, Canvas 2D
 - Architecture: Microservices, event-driven systems, distributed rate limiting, WebSocket protocol design
 
-## Project: Directly (Q IT Technologies, 2025–present, closed-source)
+## Q IT Technologies — Lead AI/ML Engineer (Jun 2025 – present, Gainesville, FL)
+
+### Directly (closed-source product)
 Real-time AI dance coaching platform.
 - Visual feedback latency: <150ms end-to-end
 - Voice loop round trip: <500ms
@@ -57,7 +59,7 @@ Real-time AI dance coaching platform.
 - Real-time RNN beat detection via madmom with hierarchical choreography segmentation
 - Backend: typed bidirectional WebSocket protocol with 33+ discriminated message types; FastAPI + async SQLAlchemy 2.0 + Alembic + pgvector; multi-stage teaching state machine (demo → practice → evaluate → full dance) with rep tracking, auto-advance at ≥70% score, idle detection
 
-## Project: Shorten (Q IT Technologies, 2025, closed-source)
+### Shorten (closed-source product)
 AI video intelligence platform that turns 50–100 aggregated video signals into 80–120 page enterprise reports.
 - 6-stage LLM pipeline using Gemini 2.5 Pro
 - Per-report cost: $0.40–0.60; ~40K–60K tokens; hard ceiling enforced under $5/brand
@@ -69,7 +71,7 @@ AI video intelligence platform that turns 50–100 aggregated video signals into
 - 15+ CLI scripts for end-to-end pipeline orchestration: setup → ingestion → aggregation → report generation
 - 100–300 videos analyzed per brand with automated engagement velocity and viral potential scoring
 
-## Project: FavorIt (Q IT Technologies, 2025, closed-source)
+### FavorIt (closed-source product)
 Peer-to-peer marketplace mobile app.
 - GenAI receipt processing: Vision OCR + GPT-4 — cut settlement time by over 80%
 - Bounding-box-based POI detection for real-time location discovery
@@ -79,12 +81,25 @@ Peer-to-peer marketplace mobile app.
 - Firestore real-time subscriptions with composite indexes and multi-document atomic transactions
 - React Native (Expo): 55% perf improvement via skeleton screens, FlashList, memoized components, efficient data loading
 
-## Project: UniBazaar (personal, 2024, on GitHub)
+## Personal projects
+
+### UniBazaar (personal, 2024, public on GitHub)
 Auto-scaling Go + WebSocket marketplace.
 - 99.9% uptime, 35% lower API latency
 - Optimized Golang RESTful APIs and WebSocket communication
 - Deployed on AWS (EC2, RDS, S3, Lambda) and Azure
 - Stack: Go, PostgreSQL, React, Tailwind, Docker
+- Repo: github.com/Jawsenigma (UniBazaar)
+
+### Text-Redactor (personal, 2024, public on GitHub)
+Python package that automatically redacts user-specified sensitive information (names, addresses) from large text corpora using optimized regex.
+- 80% privacy-compliance gain, 60% faster regex pipeline
+- Repo: github.com/Jawsenigma/Text-Redactor
+
+### Essay Evaluator (personal, 2024, public on GitHub)
+Django web app using OpenAI API to grade essays — spelling, content relevance, structured scoring — with Google SSO auth.
+- Stack: Python, Django, OpenAI API, PostgreSQL, React
+- Repo: github.com/Jawsenigma/Backend_Django_Essay_Evaluator
 
 ## Past experience
 
