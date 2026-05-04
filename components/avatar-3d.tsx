@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Camera, CameraOff, Loader2 } from "lucide-react";
+import { setFaviconState } from "@/lib/favicon-events";
 
 type Mode = "idle" | "loading" | "live" | "error";
 type Pt = { x: number; y: number; z: number };
@@ -346,6 +347,7 @@ export function Avatar3D() {
       sceneRef.current?.setLandmarker(landmarker);
       sceneRef.current?.setPoseSource("live");
       setMode("live");
+      setFaviconState("avatar", "active");
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       setError(msg);
@@ -356,6 +358,7 @@ export function Avatar3D() {
   function disableCamera() {
     sceneRef.current?.setPoseSource("idle");
     sceneRef.current?.setLandmarker(null);
+    setFaviconState("avatar", "idle");
     const video = videoRef.current;
     if (video?.srcObject) {
       (video.srcObject as MediaStream).getTracks().forEach((t) => t.stop());

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { ChatWidget } from "@/components/chat-widget";
+import { AnimatedFavicon } from "@/components/animated-favicon";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({
         <main className="flex-1 relative z-10">{children}</main>
         <Footer />
         <ChatWidget />
+        <AnimatedFavicon />
       </body>
     </html>
   );

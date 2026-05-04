@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MessageSquare, X, Send, Sparkles } from "lucide-react";
+import { setFaviconState } from "@/lib/favicon-events";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -33,6 +34,7 @@ export function ChatWidget() {
     const next: Msg[] = [...messages, { role: "user", content }];
     setMessages(next);
     setStreaming(true);
+    setFaviconState("chat", "thinking");
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
 
     try {
@@ -70,6 +72,7 @@ export function ChatWidget() {
       });
     } finally {
       setStreaming(false);
+      setFaviconState("chat", "idle");
     }
   }
 
