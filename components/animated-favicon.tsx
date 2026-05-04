@@ -115,7 +115,7 @@ export function AnimatedFavicon() {
       ctx.lineTo(cx, hipY);
       ctx.stroke();
 
-      // Arms — wiggle on inverse
+      // Arms - wiggle on inverse
       ctx.beginPath();
       ctx.moveTo(cx, torsoMidY);
       ctx.lineTo(cx - 14, torsoMidY + 8 + wiggle * 8);

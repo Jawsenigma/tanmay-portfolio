@@ -5,7 +5,7 @@ import { RESUME_PATH } from "@/lib/utils";
 export const metadata = {
   title: "Résumé",
   description:
-    "Tanmay Saxena — AI/ML Engineer résumé. Production LLM pipelines, real-time CV, sub-second voice systems.",
+    "Tanmay Saxena - AI/ML Engineer résumé. Production LLM pipelines, real-time CV, sub-second voice systems.",
 };
 
 const SIGNATURE_STACK = [
@@ -41,7 +41,7 @@ export default function ResumePage() {
               Tanmay Saxena · AI/ML Engineer
             </h1>
             <p className="mt-3 text-fg-muted max-w-xl">
-              3+ years shipping production AI — multi-stage LLM pipelines, real-time computer vision, and sub-second voice systems.
+              3+ years shipping production AI - multi-stage LLM pipelines, real-time computer vision, and sub-second voice systems.
             </p>
           </div>
           <a
@@ -108,7 +108,7 @@ export default function ResumePage() {
           <div className="md:hidden p-10 text-center bg-bg">
             <FileText className="w-10 h-10 mx-auto mb-3 text-fg-muted" />
             <p className="text-fg mb-4 text-sm">
-              PDF preview is heavy on mobile — tap below to open.
+              PDF preview is heavy on mobile - tap below to open.
             </p>
             <a
               href={RESUME_PATH}

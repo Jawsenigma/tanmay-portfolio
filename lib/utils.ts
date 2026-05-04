@@ -8,4 +8,4 @@ export function cn(...inputs: ClassValue[]) {
 export const RESUME_PATH = "/resumes/tanmay-saxena-ai-engineer.pdf";
 
 export const TAGLINE =
-  "I build production AI systems with hard latency and cost budgets — multi-stage LLM pipelines, real-time computer vision, and sub-second voice loops.";
+  "I build production AI systems with hard latency and cost budgets - multi-stage LLM pipelines, real-time computer vision, and sub-second voice loops.";

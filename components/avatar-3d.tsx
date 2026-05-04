@@ -452,7 +452,7 @@ export function Avatar3D() {
       </div>
 
       <div className="px-4 py-2.5 border-t border-border bg-bg-elev-2 text-xs text-fg-muted leading-relaxed">
-        3D wireframe avatar. <span className="text-fg">Idle</span> by default — ambient sway. <span className="text-fg">Mirror me</span> drives the rig with your pose via MediaPipe (video stays on your device).
+        3D wireframe avatar. <span className="text-fg">Idle</span> by default - ambient sway. <span className="text-fg">Mirror me</span> drives the rig with your pose via MediaPipe (video stays on your device).
       </div>
     </div>
   );

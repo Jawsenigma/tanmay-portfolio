@@ -19,13 +19,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://jawsenigma.netlify.app"),
   title: {
-    default: "Tanmay Saxena — AI/ML Engineer",
+    default: "Tanmay Saxena - AI/ML Engineer",
     template: "%s · Tanmay Saxena",
   },
   description:
     "AI/ML engineer building production LLM pipelines, real-time computer vision, and sub-second voice systems. MS CS, University of Florida.",
   openGraph: {
-    title: "Tanmay Saxena — AI/ML Engineer",
+    title: "Tanmay Saxena - AI/ML Engineer",
     description:
       "AI/ML engineer building production LLM pipelines, real-time computer vision, and sub-second voice systems.",
     url: "https://jawsenigma.netlify.app",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tanmay Saxena — AI/ML Engineer",
+    title: "Tanmay Saxena - AI/ML Engineer",
     description:
       "AI/ML engineer building production LLM pipelines, real-time computer vision, and sub-second voice systems.",
   },

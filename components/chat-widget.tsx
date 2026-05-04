@@ -122,7 +122,7 @@ export function ChatWidget() {
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-sm text-fg-muted">
-                  Ask anything about my work — projects, stack, decisions, latency targets.
+                  Ask anything about my work - projects, stack, decisions, latency targets.
                 </p>
                 <div className="space-y-1.5">
                   {SUGGESTED.map((s) => (

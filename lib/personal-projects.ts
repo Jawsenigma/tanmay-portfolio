@@ -21,7 +21,7 @@ export const PERSONAL_PROJECTS: PersonalProject[] = [
   {
     name: "Essay Evaluator",
     description:
-      "Django web app that uses the OpenAI API to grade essays — spelling, content relevance, structured scoring — with Google SSO auth.",
+      "Django web app that uses the OpenAI API to grade essays - spelling, content relevance, structured scoring - with Google SSO auth.",
     language: "Python · Django",
     year: "2024",
     href: "https://github.com/Jawsenigma/Backend_Django_Essay_Evaluator",

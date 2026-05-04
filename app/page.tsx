@@ -30,16 +30,16 @@ export default function Home() {
           </div>
           <div className="prose-tanmay text-fg-muted">
             <p>
-              I&apos;m an <strong>AI/ML Engineer</strong> who builds production systems where every millisecond and every cent counts. Foundation models are the easy part — the engineering is the chain around them: graceful fallback, latency budgets, RAG plumbing, GPU dispatch, cost ceilings, evals.
+              I&apos;m an <strong>AI/ML Engineer</strong> who builds production systems where every millisecond and every cent counts. Foundation models are the easy part. The engineering is the chain around them: graceful fallback, latency budgets, RAG plumbing, GPU dispatch, cost ceilings, evals.
             </p>
             <p>
               I currently lead AI/ML engineering at <strong>Q IT Technologies</strong>, where I&apos;ve led delivery of three production AI products: <Link href="/projects/directly" className="text-accent">Directly</Link>, <Link href="/projects/shorten" className="text-accent">Shorten</Link>, and the GenAI features inside <Link href="/projects/favorit" className="text-accent">FavorIt</Link>.
             </p>
             <p>
-              I have an <strong>MS in Computer Science</strong> from the University of Florida (3.90 / 4.00). Before AI, I built large-scale Django/PostgreSQL pipelines for General Motors&apos; ADAS data at TCS — the systems-engineering muscle still shows up in how I scaffold inference infrastructure.
+              I have an <strong>MS in Computer Science</strong> from the University of Florida (3.90 / 4.00). Before AI, I built large-scale Django/PostgreSQL pipelines for General Motors&apos; ADAS data at TCS. That systems-engineering muscle still shows up in how I scaffold inference infrastructure.
             </p>
             <p>
-              What I optimize for: <strong>latency budgets</strong>, <strong>graceful degradation</strong>, <strong>cost-controlled inference</strong>. The hero you scrolled past runs MediaPipe Pose + Three.js client-side — same client-side CV pattern as Directly. The chat agent on this page runs Llama 3.3 70B on Groq&apos;s LPU (free tier) — same Groq inference engine I use in Shorten.
+              What I optimize for: <strong>latency budgets</strong>, <strong>graceful degradation</strong>, <strong>cost-controlled inference</strong>. The hero you scrolled past runs MediaPipe Pose + Three.js client-side, the same client-side pattern I lean on in my CV work. The chat agent on this page is Llama 3.3 70B, grounded only in my actual experience and projects.
             </p>
           </div>
         </div>

@@ -17,7 +17,7 @@ export function ExperienceSection() {
             </h2>
           </div>
           <p className="text-fg-muted text-sm max-w-md">
-            Three companies, four years. The Q IT products are closed-source — I can&apos;t share repos, but happy to deep-dive architecture in an interview.
+            Three companies, four years. The Q IT products are closed-source - I can&apos;t share repos, but happy to deep-dive architecture in an interview.
           </p>
         </div>
 

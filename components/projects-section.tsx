@@ -21,7 +21,7 @@ export function ProjectsSection() {
             </h2>
           </div>
           <p className="text-fg-muted text-sm max-w-md">
-            Open-source side work — code is on GitHub, no NDA in the way.
+            Open-source side work - code is on GitHub, no NDA in the way.
           </p>
         </div>
 

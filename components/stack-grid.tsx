@@ -73,7 +73,7 @@ export function StackGrid() {
             </h2>
           </div>
           <p className="text-fg-muted text-sm max-w-md">
-            Production AI is rarely one model. It&apos;s a chain of providers, fallbacks, embeddings, GPU compute, and rate limits — all under a latency budget.
+            Production AI is rarely one model. It&apos;s a chain of providers, fallbacks, embeddings, GPU compute, and rate limits - all under a latency budget.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">

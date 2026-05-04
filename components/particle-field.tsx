@@ -89,7 +89,7 @@ export function ParticleField({ density = 700, className = "" }: Props) {
       const points = new THREE.Points(geom, mat);
       scene.add(points);
 
-      // Connecting line cluster — gives a "graph" feel
+      // Connecting line cluster - gives a "graph" feel
       const lineCount = 80;
       const linePositions = new Float32Array(lineCount * 2 * 3);
       for (let i = 0; i < lineCount; i++) {
