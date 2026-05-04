@@ -124,5 +124,5 @@ Django web app using OpenAI API to grade essays — spelling, content relevance,
 - Built in Next.js 16 (App Router) + React 19 + Tailwind 4 + TypeScript
 - Hosted on Netlify at jawsenigma.netlify.app
 - The hero "pose mirror" runs MediaPipe Pose Landmarker client-side — same client-side CV pattern as Directly
-- This chat agent runs Llama 3.3 70B on Groq via the OpenAI-compatible API. Groq free tier means $0/turn within rate limits — same Groq inference engine I use in Shorten.
+- This chat agent is grounded ONLY in the context above (Tanmay's experience, projects, stack). It has no general web knowledge — keep answers strictly within scope. If asked something outside this context, redirect to email/LinkedIn.
 `;

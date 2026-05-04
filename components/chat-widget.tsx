@@ -99,7 +99,7 @@ export function ChatWidget() {
             <div>
               <div className="text-sm font-medium">Ask Tanmay&apos;s portfolio</div>
               <div className="text-[11px] text-fg-muted font-mono">
-                Groq · Llama 3.3 70B · free-tier
+                Trained on my work
               </div>
             </div>
           </div>
