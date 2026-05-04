@@ -28,13 +28,13 @@ export const EXPERIENCE: ExperienceEntry[] = [
         slug: "shorten",
         name: "Shorten",
         oneLiner:
-          "AI video intelligence platform - 6-stage LLM pipeline turning 100+ videos into 80–120 page enterprise reports for under $5/brand.",
+          "AI video intelligence platform - multi-stage LLM pipeline turning aggregated short-form videos into 80–120 page enterprise reports.",
       },
       {
         slug: "favorit",
         name: "FavorIt",
         oneLiner:
-          "P2P marketplace with GenAI receipt OCR (Vision + GPT-4) cutting settlement time by 80%, real-time Firebase, Stripe payments.",
+          "P2P marketplace with GenAI receipt OCR cutting settlement time by 80%, real-time Firebase, Stripe payments.",
       },
     ],
   },

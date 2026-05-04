@@ -58,7 +58,7 @@ export function Hero() {
             <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 max-w-2xl">
               <Stat value="<150ms" label="Real-time CV feedback" />
               <Stat value="<500ms" label="Voice loop round-trip" />
-              <Stat value="6-stage" label="LLM pipelines, $0.40/run" />
+              <Stat value="Multi-stage" label="Cost-controlled LLM pipelines" />
               <Stat value="3.90" label="MS CS · UF · 2025" />
             </div>
           </div>

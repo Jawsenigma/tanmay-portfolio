@@ -38,8 +38,8 @@ const CATEGORIES: Category[] = [
     subtitle: "Client-side, GPU-accelerated",
     items: [
       "MediaPipe Pose / Hand Landmarker",
-      "Multi-HMR + ANNY (163-bone mesh)",
-      "3D Gaussian Splatting (GauHuman)",
+      "Parametric body models (Multi-HMR / ANNY)",
+      "3D Gaussian Splatting",
       "WebGPU + custom WGSL shaders",
       "ONNX Runtime Web · Three.js",
     ],
